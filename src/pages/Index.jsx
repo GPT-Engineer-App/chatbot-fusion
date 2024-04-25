@@ -17,8 +17,10 @@ const Index = () => {
     const nextAgent = agent === "Claude" ? "Gemini" : "Claude";
     const responseText = agent === "Claude" ? `Claude's response to: "${message}"` : `Gemini's response to: "${message}"`;
     setTimeout(() => {
+      setIsLoading(true);
       setMessages((prev) => [...prev, { sender: agent, text: responseText }]);
       handleAgentResponses(responseText, nextAgent);
+      setIsLoading(false);
     }, 1000);
   };
 
@@ -30,6 +32,8 @@ const Index = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   return (
     <Container maxW="container.md" py={10}>
       <VStack spacing={4}>
@@ -38,7 +42,7 @@ const Index = () => {
         </Text>
         <Flex w="full" p={4} alignItems="center" justifyContent="space-between" bg="gray.100" borderRadius="md">
           <Input placeholder="Enter your prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} onKeyPress={(e) => e.key === "Enter" && handleSendPrompt()} />
-          <Button onClick={handleSendPrompt} ml={2} colorScheme="blue" leftIcon={<FaRobot />}>
+          <Button onClick={handleSendPrompt} ml={2} colorScheme="blue" leftIcon={<FaRobot />} isLoading={isLoading}>
             Send
           </Button>
         </Flex>
