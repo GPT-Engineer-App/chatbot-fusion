@@ -1,6 +1,6 @@
 // Complete the Index page component here
 // Use chakra-ui
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Container, Flex, Input, Text, VStack } from "@chakra-ui/react";
 import { FaRobot } from "react-icons/fa";
 
@@ -14,14 +14,7 @@ const Index = () => {
     if (message.includes("project done")) {
       return;
     }
-    const nextAgent = agent === "Claude" ? "Gemini" : "Claude";
-    const responseText = agent === "Claude" ? `Claude's response to: "${message}"` : `Gemini's response to: "${message}"`;
-    setTimeout(() => {
-      setIsLoading(true);
-      setMessages((prev) => [...prev, { sender: agent, text: responseText }]);
-      handleAgentResponses(responseText, nextAgent);
-      setIsLoading(false);
-    }, 1000);
+    setIsLoading(false);
   };
 
   const handleSendPrompt = () => {
