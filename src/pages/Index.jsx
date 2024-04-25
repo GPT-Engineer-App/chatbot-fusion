@@ -8,6 +8,7 @@ const Index = () => {
   // State to store the user's initial prompt
   const [prompt, setPrompt] = React.useState("");
   const [messages, setMessages] = React.useState([]);
+  const [debugInfo, setDebugInfo] = React.useState([]);
 
   // Function to handle sending a new prompt
   const handleAgentResponses = (message, agent = "Claude") => {
@@ -20,6 +21,7 @@ const Index = () => {
   const handleSendPrompt = () => {
     if (prompt.trim() !== "") {
       setMessages([...messages, { sender: "User", text: prompt }]);
+      setDebugInfo([...debugInfo, `Sent prompt: ${prompt}`]);
       handleAgentResponses(prompt);
       setPrompt("");
     }
@@ -45,6 +47,13 @@ const Index = () => {
               <Text fontWeight="bold">{message.sender}:</Text>
               <Text>{message.text}</Text>
             </Box>
+          ))}
+        </Box>
+        <Box w="full" bg="gray.50" p={4} borderRadius="md" border="1px" borderColor="gray.300" overflowY="auto" maxH="200px">
+          {debugInfo.map((info, index) => (
+            <Text key={index} fontSize="sm">
+              {info}
+            </Text>
           ))}
         </Box>
       </VStack>
