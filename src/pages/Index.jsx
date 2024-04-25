@@ -10,18 +10,22 @@ const Index = () => {
   const [messages, setMessages] = React.useState([]);
 
   // Function to handle sending a new prompt
+  const handleAgentResponses = (message, agent = "Claude") => {
+    if (message.includes("project done")) {
+      return;
+    }
+    const nextAgent = agent === "Claude" ? "Gemini" : "Claude";
+    const responseText = agent === "Claude" ? `Claude's response to: "${message}"` : `Gemini's response to: "${message}"`;
+    setTimeout(() => {
+      setMessages((prev) => [...prev, { sender: agent, text: responseText }]);
+      handleAgentResponses(responseText, nextAgent);
+    }, 1000);
+  };
+
   const handleSendPrompt = () => {
     if (prompt.trim() !== "") {
-      // Simulate sending the prompt to the chat agents
       setMessages([...messages, { sender: "User", text: prompt }]);
-      // Simulate responses from Claude and Gemini agents
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { sender: "Claude", text: `Claude's response to: "${prompt}"` }]);
-      }, 1000);
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { sender: "Gemini", text: `Gemini's response to: "${prompt}"` }]);
-      }, 2000);
-      // Clear the prompt input
+      handleAgentResponses(prompt);
       setPrompt("");
     }
   };
